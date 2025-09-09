@@ -99,8 +99,8 @@ class MCPClientWrapper:
 1. **Create the agent class:**
 
 ```python
-# .kiro/agents/custom_adk_agent.py
-from .base_agent import BaseADKAgent
+# arkaft-adk-agents/agents/custom_adk_agent.py
+from ...kiro.agents.base_agent import BaseADKAgent
 from typing import Dict, Any
 
 class CustomADKAgent(BaseADKAgent):
@@ -182,7 +182,7 @@ class CustomADKAgent(BaseADKAgent):
 3. **Create test file:**
 
 ```python
-# .kiro/agents/test_custom_adk_agent.py
+# arkaft-adk-agents/tests/test_custom_adk_agent.py
 import asyncio
 import json
 from custom_adk_agent import CustomADKAgent
@@ -367,7 +367,7 @@ class ExtendedMCPClient(MCPClientWrapper):
       },
       {
         "type": "custom",
-        "script": ".kiro/hooks/custom_condition.py",
+        "script": "../.kiro/hooks/custom_condition.py",
         "function": "check_custom_condition"
       }
     ],
@@ -379,7 +379,7 @@ class ExtendedMCPClient(MCPClientWrapper):
 3. **Custom condition script:**
 
 ```python
-# .kiro/hooks/custom_condition.py
+# ../.kiro/hooks/custom_condition.py
 def check_custom_condition(context: Dict[str, Any]) -> bool:
     """Custom condition logic"""
     file_content = context.get('file_content', '')
@@ -391,13 +391,13 @@ def check_custom_condition(context: Dict[str, Any]) -> bool:
 ### Hook Testing
 
 ```python
-# .kiro/hooks/test_custom_hook.py
+# ../.kiro/hooks/test_custom_hook.py
 import json
 from pathlib import Path
 
 def test_hook_configuration():
     """Test hook configuration validity"""
-    hook_file = Path('.kiro/hooks/custom-adk-hook.kiro.hook')
+    hook_file = Path('../.kiro/hooks/custom-adk-hook.kiro.hook')
     
     with open(hook_file) as f:
         config = json.load(f)
@@ -429,7 +429,7 @@ def test_hook_conditions():
 ### Agent Testing
 
 ```python
-# .kiro/agents/test_framework.py
+# arkaft-adk-agents/tests/test_framework.py
 import asyncio
 import pytest
 from unittest.mock import Mock, AsyncMock
@@ -482,7 +482,7 @@ class TestADKAgent:
 ### Integration Testing
 
 ```python
-# .kiro/agents/integration_test.py
+# arkaft-adk-agents/tests/integration_test.py
 import asyncio
 import tempfile
 from pathlib import Path
@@ -533,7 +533,7 @@ google-adk = "0.1.0"
 ### Performance Testing
 
 ```python
-# .kiro/agents/performance_test.py
+# arkaft-adk-agents/tests/performance_test.py
 import asyncio
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -600,13 +600,13 @@ async def test_agent_performance():
    
    # Implement feature with tests
    # Run tests
-   python -m pytest .kiro/agents/test_custom_agent.py
+   python -m pytest tests/test_custom_agent.py
    
    # Validate configuration
-   python .kiro/agents/validate_config.py
+   python agents/adk_config_manager.py
    
    # Run integration tests
-   python .kiro/agents/integration_test.py
+   python tests/integration_test.py
    ```
 
 2. **Documentation:**

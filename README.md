@@ -32,6 +32,37 @@ All components are complete and tested:
 - Comprehensive test suite with full coverage
 - Complete documentation and setup guides
 
+## Project Structure
+
+The ADK Agents system is now organized with clear separation between components:
+
+```
+arkaft-adk-agents/
+├── agents/                    # ADK-specific agent implementations
+│   ├── adk_architecture_agent.py
+│   ├── adk_code_review_agent.py
+│   ├── adk_project_assistant_agent.py
+│   ├── adk_docs_agent.py
+│   └── adk_config_manager.py
+├── config/                    # Agent configuration files
+│   ├── adk_architecture_agent.json
+│   ├── adk_code_review_agent.json
+│   ├── adk_project_assistant_agent.json
+│   └── adk_docs_agent.json
+├── tests/                     # Comprehensive test suite
+│   ├── test_adk_architecture_agent.py
+│   ├── test_adk_code_review_agent.py
+│   ├── test_adk_project_assistant_agent.py
+│   ├── test_adk_docs_agent.py
+│   └── run_tests.py
+├── docs/                      # Agent documentation
+│   ├── adk_architecture_agent.md
+│   ├── adk_code_review_agent.md
+│   ├── adk_docs_assistant.md
+│   └── adk_project_assistant.md
+└── examples/                  # Usage examples and configurations
+```
+
 ## Quick Start
 
 ### Prerequisites
@@ -46,7 +77,7 @@ All components are complete and tested:
 1. **Set up the MCP Server**
    ```bash
    # Build the arkaft-mcp-google-adk server
-   cd arkaft-mcp-google-adk
+   cd ../arkaft-mcp-google-adk
    cargo build --release
    ```
 

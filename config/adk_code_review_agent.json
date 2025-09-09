@@ -1,0 +1,100 @@
+{
+  "name": "adk-code-review-agent",
+  "displayName": "ADK Code Review Agent",
+  "description": "Automated code review agent for Google ADK projects using arkaft-mcp-google-adk MCP server",
+  "version": "1.0.0",
+  "type": "mcp-integrated",
+  "capabilities": [
+    "code-review",
+    "adk-compliance",
+    "best-practices",
+    "architectural-validation"
+  ],
+  "configuration": {
+    "mcpServer": "arkaft-google-adk",
+    "requiredTools": [
+      "review_rust_file",
+      "validate_architecture",
+      "get_best_practices",
+      "adk_query"
+    ],
+    "supportedFileTypes": [
+      "*.rs"
+    ],
+    "maxFileSize": "50KB",
+    "processingTimeout": "30s"
+  },
+  "prompts": {
+    "system": "You are an expert Google ADK code review agent. Use the arkaft-mcp-google-adk MCP server tools to provide comprehensive code analysis and recommendations for ADK compliance, best practices, and improvements.",
+    "codeReview": "Analyze the provided Rust code file for ADK compliance and best practices. Use the review_rust_file MCP tool for primary analysis, validate_architecture for architectural patterns, and get_best_practices for recommendations. Focus on translation opportunities, error handling, architectural compliance, and code quality. Present findings in a clear, actionable format with specific line references.",
+    "errorFallback": "The MCP server is currently unavailable. Providing basic code review based on general Rust and ADK best practices. For comprehensive analysis, please retry when the MCP server is accessible."
+  },
+  "errorHandling": {
+    "mcpUnavailable": {
+      "strategy": "graceful-degradation",
+      "fallbackMessage": "MCP server unavailable - providing basic review",
+      "retryAttempts": 3,
+      "retryDelay": "5s"
+    },
+    "toolFailure": {
+      "strategy": "partial-analysis",
+      "continueOnFailure": true,
+      "reportFailures": true
+    },
+    "timeout": {
+      "strategy": "abort-with-message",
+      "message": "Code review timed out - file may be too large or complex"
+    }
+  },
+  "performance": {
+    "debounceMs": 2000,
+    "maxConcurrentReviews": 3,
+    "cacheResults": true,
+    "cacheTtl": "5m"
+  },
+  "integration": {
+    "hooks": [
+      "adk-code-review"
+    ],
+    "triggers": [
+      {
+        "type": "file-save",
+        "patterns": ["*.rs"],
+        "conditions": {
+          "projectType": "adk",
+          "fileSize": "< 50KB"
+        }
+      }
+    ],
+    "contextRequirements": [
+      "file-content",
+      "file-path",
+      "project-context"
+    ]
+  },
+  "output": {
+    "format": "markdown",
+    "sections": [
+      "summary",
+      "detailed-findings",
+      "best-practices-validation",
+      "action-items",
+      "references"
+    ],
+    "priorityLevels": ["High", "Medium", "Low"],
+    "includeExamples": true,
+    "includeReferences": true
+  },
+  "dependencies": {
+    "mcpServers": ["arkaft-google-adk"],
+    "pythonPackages": ["asyncio", "dataclasses", "typing", "json"],
+    "minimumKiroVersion": "1.0.0"
+  },
+  "metadata": {
+    "author": "Arkaft ADK Development Suite",
+    "license": "MIT",
+    "repository": "https://github.com/arkaft/adk-development-suite",
+    "documentation": "https://docs.arkaft.com/adk-agents/code-review",
+    "tags": ["adk", "code-review", "rust", "mcp", "automation"]
+  }
+}

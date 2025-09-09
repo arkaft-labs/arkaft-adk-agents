@@ -1,0 +1,123 @@
+{
+  "name": "adk-architecture-agent",
+  "displayName": "ADK Architecture Agent",
+  "description": "Architectural validation agent for Google ADK projects using arkaft-mcp-google-adk MCP server",
+  "version": "1.0.0",
+  "type": "mcp-integrated",
+  "capabilities": [
+    "architecture-validation",
+    "component-organization",
+    "dependency-analysis",
+    "pattern-compliance",
+    "best-practices-enforcement"
+  ],
+  "configuration": {
+    "mcpServer": "arkaft-google-adk",
+    "requiredTools": [
+      "validate_architecture",
+      "get_best_practices",
+      "adk_query",
+      "review_rust_file"
+    ],
+    "supportedFileTypes": [
+      "lib.rs",
+      "main.rs",
+      "mod.rs",
+      "Cargo.toml",
+      "adk.toml",
+      "adk-config.json"
+    ],
+    "processingTimeout": "45s"
+  },
+  "prompts": {
+    "system": "You are an expert Google ADK architecture validation agent. Use the arkaft-mcp-google-adk MCP server tools to validate architectural patterns, component organization, and adherence to ADK best practices.",
+    "architectureValidation": "Validate the architectural patterns in the provided files against Google ADK best practices. Use validate_architecture for pattern checking, get_best_practices for compliance recommendations, and adk_query for specific guidance. Focus on component organization, dependency management, and architectural compliance. Coordinate with other agents to ensure consistent advice.",
+    "errorFallback": "The MCP server is currently unavailable. Providing basic architectural guidance based on general ADK patterns and best practices. For comprehensive validation, please retry when the MCP server is accessible."
+  },
+  "errorHandling": {
+    "mcpUnavailable": {
+      "strategy": "graceful-degradation",
+      "fallbackMessage": "MCP server unavailable - providing basic architectural guidance",
+      "retryAttempts": 3,
+      "retryDelay": "5s"
+    },
+    "toolFailure": {
+      "strategy": "partial-analysis",
+      "continueOnFailure": true,
+      "reportFailures": true
+    },
+    "timeout": {
+      "strategy": "abort-with-message",
+      "message": "Architecture validation timed out - project may be too complex"
+    }
+  },
+  "performance": {
+    "debounceMs": 1500,
+    "maxConcurrentValidations": 2,
+    "cacheResults": true,
+    "cacheTtl": "10m"
+  },
+  "integration": {
+    "hooks": [
+      "adk-architecture-validator"
+    ],
+    "triggers": [
+      {
+        "type": "file-save",
+        "patterns": ["src/lib.rs", "src/main.rs", "src/**/mod.rs", "Cargo.toml"],
+        "conditions": {
+          "projectType": "adk"
+        }
+      }
+    ],
+    "contextRequirements": [
+      "file-content",
+      "file-path",
+      "project-context",
+      "dependency-graph"
+    ]
+  },
+  "output": {
+    "format": "markdown",
+    "sections": [
+      "architectural-summary",
+      "component-analysis",
+      "dependency-validation",
+      "pattern-compliance",
+      "recommendations",
+      "coordination-notes"
+    ],
+    "priorityLevels": ["Critical", "High", "Medium", "Low"],
+    "includeExamples": true,
+    "includeReferences": true
+  },
+  "coordination": {
+    "avoidConflicts": true,
+    "shareContext": true,
+    "prioritySystem": {
+      "manual": 1,
+      "architecture": 2,
+      "code-review": 3
+    },
+    "consistencyChecks": true
+  },
+  "validation": {
+    "strictMode": false,
+    "checkDependencies": true,
+    "validateStructure": true,
+    "enforceConventions": true,
+    "customPatterns": []
+  },
+  "dependencies": {
+    "mcpServers": ["arkaft-google-adk"],
+    "pythonPackages": ["asyncio", "dataclasses", "typing", "json", "pathlib"],
+    "minimumKiroVersion": "1.0.0"
+  },
+  "metadata": {
+    "author": "Arkaft ADK Development Suite",
+    "license": "MIT",
+    "repository": "https://github.com/arkaft/adk-development-suite",
+    "documentation": "https://docs.arkaft.com/adk-agents/architecture-validator",
+    "tags": ["adk", "architecture", "validation", "rust", "mcp", "patterns"]
+  }
+}

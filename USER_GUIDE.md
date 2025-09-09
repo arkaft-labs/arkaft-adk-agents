@@ -14,7 +14,7 @@ This guide covers how to customize agent behavior, configure hooks, and optimize
 
 ### Basic Agent Settings
 
-Each agent can be individually configured in `.kiro/settings/adk-agents.json`:
+Each agent can be individually configured in `../.kiro/settings/adk-agents.json`:
 
 ```json
 {
@@ -371,17 +371,17 @@ Configure the system for custom extensions:
   "extensibility": {
     "customAgents": {
       "allowCustomAgents": true,
-      "customAgentPath": ".kiro/custom-agents/",
+      "customAgentPath": "../.kiro/custom-agents/",
       "inheritFromBase": true
     },
     "customHooks": {
       "allowCustomHooks": true,
-      "customHookPath": ".kiro/custom-hooks/",
+      "customHookPath": "../.kiro/custom-hooks/",
       "validateSchema": true
     },
     "plugins": {
       "enablePluginSystem": false,
-      "pluginPath": ".kiro/plugins/",
+      "pluginPath": "../.kiro/plugins/",
       "sandboxPlugins": true
     }
   }
@@ -396,11 +396,11 @@ The system validates all configuration against JSON schemas:
 
 ```bash
 # Validate configuration
-python .kiro/agents/validate_config.py
+python agents/adk_config_manager.py
 
 # Check specific configuration section
-python .kiro/agents/validate_config.py --section agents
-python .kiro/agents/validate_config.py --section hooks
+python agents/adk_config_manager.py --section agents
+python agents/adk_config_manager.py --section hooks
 ```
 
 ### Configuration Migration
@@ -412,7 +412,7 @@ When updating the system, configurations are automatically migrated:
   "migration": {
     "autoMigrate": true,
     "backupBeforeMigration": true,
-    "migrationPath": ".kiro/config-backups/",
+    "migrationPath": "../.kiro/config-backups/",
     "validateAfterMigration": true
   }
 }

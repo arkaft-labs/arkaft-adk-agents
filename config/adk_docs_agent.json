@@ -1,0 +1,100 @@
+{
+  "name": "ADK Documentation Agent",
+  "version": "1.0.0",
+  "description": "Provides contextual ADK documentation assistance using the arkaft-mcp-google-adk MCP server",
+  "type": "python",
+  "executable": ".kiro/agents/adk-docs-agent.py",
+  "capabilities": [
+    "documentation_assistance",
+    "context_aware_queries",
+    "version_specific_guidance",
+    "best_practices_integration",
+    "fallback_handling"
+  ],
+  "mcp_integration": {
+    "server": "arkaft-google-adk",
+    "primary_tools": [
+      "adk_query"
+    ],
+    "secondary_tools": [
+      "get_best_practices",
+      "validate_architecture",
+      "review_rust_file"
+    ],
+    "fallback_enabled": true
+  },
+  "configuration": {
+    "response_format": "markdown",
+    "include_examples": true,
+    "include_references": true,
+    "include_best_practices": true,
+    "context_awareness": {
+      "current_file": true,
+      "project_structure": true,
+      "open_files": false
+    }
+  },
+  "triggers": {
+    "manual": {
+      "enabled": true,
+      "keywords": [
+        "adk-help",
+        "adk-docs",
+        "adk-documentation"
+      ]
+    },
+    "contextual": {
+      "enabled": true,
+      "file_patterns": [
+        "*.rs",
+        "Cargo.toml",
+        "adk.toml",
+        "adk-config.json"
+      ]
+    }
+  },
+  "project_detection": {
+    "cargo_dependencies": [
+      "google-adk",
+      "adk-core",
+      "adk-runtime",
+      "adk-macros"
+    ],
+    "config_files": [
+      "adk.toml",
+      "adk-config.json",
+      ".adk/config.json"
+    ],
+    "directory_patterns": [
+      "src/adk/",
+      "adk/",
+      "components/adk/",
+      ".adk/"
+    ]
+  },
+  "error_handling": {
+    "mcp_unavailable": {
+      "strategy": "fallback",
+      "message": "MCP server unavailable - providing general ADK guidance"
+    },
+    "tool_failure": {
+      "strategy": "graceful_degradation",
+      "retry_attempts": 2
+    },
+    "invalid_query": {
+      "strategy": "clarification",
+      "suggestions": true
+    }
+  },
+  "performance": {
+    "timeout_seconds": 30,
+    "cache_responses": true,
+    "cache_duration_minutes": 15
+  },
+  "logging": {
+    "level": "INFO",
+    "include_queries": true,
+    "include_responses": false,
+    "include_errors": true
+  }
+}

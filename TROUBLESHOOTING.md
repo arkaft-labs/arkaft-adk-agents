@@ -37,11 +37,11 @@ Test specific components:
 python test-mcp-server.py
 
 # Test individual agents
-python .kiro/agents/test-adk-code-review-agent.py
-python .kiro/agents/test-adk-architecture-agent.py
+python tests/test_adk_code_review_agent.py
+python tests/test_adk_architecture_agent.py
 
 # Validate configuration
-python .kiro/agents/validate_config.py
+python agents/adk_config_manager.py
 ```
 
 ## MCP Server Issues
@@ -56,20 +56,20 @@ python .kiro/agents/validate_config.py
 **Diagnosis:**
 ```bash
 # Check if the MCP server binary exists
-ls -la arkaft-mcp-google-adk/target/release/arkaft-mcp-google-adk
+ls -la ../arkaft-mcp-google-adk/target/release/arkaft-mcp-google-adk
 
 # Try running the server manually
-./arkaft-mcp-google-adk/target/release/arkaft-mcp-google-adk
+../arkaft-mcp-google-adk/target/release/arkaft-mcp-google-adk
 
 # Check MCP configuration
-cat .kiro/settings/mcp.json
+cat ../.kiro/settings/mcp.json
 ```
 
 **Solutions:**
 
 1. **Build the MCP server:**
    ```bash
-   cd arkaft-mcp-google-adk
+   cd ../arkaft-mcp-google-adk
    cargo build --release
    ```
 
@@ -78,7 +78,7 @@ cat .kiro/settings/mcp.json
    {
      "mcpServers": {
        "arkaft-google-adk": {
-         "command": "./arkaft-mcp-google-adk/target/release/arkaft-mcp-google-adk",
+         "command": "../arkaft-mcp-google-adk/target/release/arkaft-mcp-google-adk",
          "args": [],
          "disabled": false
        }
@@ -88,7 +88,7 @@ cat .kiro/settings/mcp.json
 
 3. **Verify permissions:**
    ```bash
-   chmod +x arkaft-mcp-google-adk/target/release/arkaft-mcp-google-adk
+   chmod +x ../arkaft-mcp-google-adk/target/release/arkaft-mcp-google-adk
    ```
 
 ### MCP Tools Not Available
@@ -175,13 +175,13 @@ print('Testing MCP tools...')
 **Diagnosis:**
 ```bash
 # Check agent configuration
-python .kiro/agents/validate_config.py
+python agents/adk_config_manager.py
 
 # Check hook registration
-ls -la .kiro/hooks/*.kiro.hook
+ls -la ../.kiro/hooks/*.kiro.hook
 
 # Test agent directly
-python .kiro/agents/adk_code_review_agent.py --test
+python agents/adk_code_review_agent.py --test
 ```
 
 **Solutions:**
@@ -239,7 +239,7 @@ python .kiro/agents/adk_code_review_agent.py --test
 2. **Configuration Errors:**
    ```bash
    # Validate configuration schema
-   python .kiro/agents/validate_config.py --verbose
+   python agents/adk_config_manager.py --verbose
    ```
 
 3. **MCP Communication Errors:**
@@ -295,12 +295,12 @@ python .kiro/agents/adk_code_review_agent.py --test
 **Diagnosis:**
 ```bash
 # Check hook files exist
-ls -la .kiro/hooks/adk-*.kiro.hook
+ls -la ../.kiro/hooks/adk-*.kiro.hook
 
 # Verify hook syntax
 python -c "
 import json
-with open('.kiro/hooks/adk-code-review.kiro.hook') as f:
+with open('../.kiro/hooks/adk-code-review.kiro.hook') as f:
     config = json.load(f)
     print('Hook config valid')
 "
@@ -381,12 +381,12 @@ with open('.kiro/hooks/adk-code-review.kiro.hook') as f:
 **Diagnosis:**
 ```bash
 # Validate configuration
-python .kiro/agents/validate_config.py --detailed
+python agents/adk_config_manager.py --detailed
 
 # Check JSON syntax
 python -c "
 import json
-with open('.kiro/settings/adk-agents.json') as f:
+with open('../.kiro/settings/adk-agents.json') as f:
     config = json.load(f)
     print('JSON syntax valid')
 "
@@ -401,16 +401,16 @@ with open('.kiro/settings/adk-agents.json') as f:
 
 2. **Validate against schema:**
    ```bash
-   python .kiro/agents/validate_config.py --schema-check
+   python agents/adk_config_manager.py --schema-check
    ```
 
 3. **Reset to defaults:**
    ```bash
    # Backup current config
-   cp .kiro/settings/adk-agents.json .kiro/settings/adk-agents.json.backup
+   cp ../.kiro/settings/adk-agents.json ../.kiro/settings/adk-agents.json.backup
    
    # Generate default config
-   python .kiro/agents/generate_default_config.py
+   python agents/adk_config_manager.py --generate-default
    ```
 
 ### Configuration Migration Issues
@@ -425,16 +425,16 @@ with open('.kiro/settings/adk-agents.json') as f:
 1. **Manual migration:**
    ```bash
    # Run migration script
-   python .kiro/agents/migrate_config.py --from-version 1.0 --to-version 2.0
+   python agents/adk_config_manager.py --migrate --from-version 1.0 --to-version 2.0
    ```
 
 2. **Restore from backup:**
    ```bash
    # List available backups
-   ls -la .kiro/config-backups/
+   ls -la ../.kiro/config-backups/
    
    # Restore specific backup
-   cp .kiro/config-backups/adk-agents-2024-01-01.json .kiro/settings/adk-agents.json
+   cp ../.kiro/config-backups/adk-agents-2024-01-01.json ../.kiro/settings/adk-agents.json
    ```
 
 ## Performance Issues
@@ -449,7 +449,7 @@ with open('.kiro/settings/adk-agents.json') as f:
 **Diagnosis:**
 ```bash
 # Monitor resource usage
-top -p $(pgrep -f "arkaft-mcp-google-adk")
+top -p $(pgrep -f "../arkaft-mcp-google-adk")
 
 # Check response times
 python test-mcp-server.py --benchmark
@@ -539,7 +539,7 @@ python test-mcp-server.py --benchmark
 {
   "mcpServers": {
     "arkaft-google-adk": {
-      "command": "./arkaft-mcp-google-adk/target/release/arkaft-mcp-google-adk",
+      "command": "../arkaft-mcp-google-adk/target/release/arkaft-mcp-google-adk",
       "disabled": false
     }
   }
@@ -551,7 +551,7 @@ python test-mcp-server.py --benchmark
 **Cause:** MCP server not providing expected tools
 
 **Solution:**
-1. Rebuild MCP server: `cd arkaft-mcp-google-adk && cargo build --release`
+1. Rebuild MCP server: `cd ../arkaft-mcp-google-adk && cargo build --release`
 2. Verify tool registration in server code
 3. Check auto-approval settings
 
@@ -562,7 +562,7 @@ python test-mcp-server.py --benchmark
 **Solution:**
 ```bash
 # Get detailed validation errors
-python .kiro/agents/validate_config.py --verbose --section agents
+python agents/adk_config_manager.py --verbose --section agents
 ```
 
 #### "Project not detected as ADK project"
@@ -581,7 +581,7 @@ python .kiro/agents/validate_config.py --verbose --section agents
 **Solution:**
 1. Check MCP server status
 2. Wait for circuit breaker recovery (default: 60 seconds)
-3. Manually reset: `python .kiro/agents/reset_circuit_breaker.py`
+3. Manually reset: `python agents/adk_config_manager.py --reset-circuit-breaker`
 
 #### "File too large for analysis"
 
@@ -601,9 +601,9 @@ python .kiro/agents/validate_config.py --verbose --section agents
 ### Log Files
 
 Check log files for detailed error information:
-- Agent logs: `.kiro/logs/agents/`
+- Agent logs: `../.kiro/logs/agents/`
 - MCP server logs: Check server output
-- Hook logs: `.kiro/logs/hooks/`
+- Hook logs: `../.kiro/logs/hooks/`
 
 ### Debug Mode
 

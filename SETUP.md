@@ -33,7 +33,7 @@ python -m venv --help
 
 ```bash
 # Navigate to the MCP server directory
-cd arkaft-mcp-google-adk
+cd ../arkaft-mcp-google-adk
 
 # Build the server in release mode
 cargo build --release
@@ -46,7 +46,7 @@ ls -la target/release/arkaft-mcp-google-adk
 
 ```bash
 # Copy the MCP configuration
-cp mcp-config-update.json .kiro/settings/mcp.json
+cp ../mcp-config-update.json ../.kiro/settings/mcp.json
 
 # Or manually add to your existing MCP configuration:
 ```

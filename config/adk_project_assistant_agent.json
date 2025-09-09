@@ -1,0 +1,173 @@
+{
+  "name": "adk-project-assistant-agent",
+  "displayName": "ADK Project Assistant Agent",
+  "description": "Comprehensive project assistant for Google ADK projects using all arkaft-mcp-google-adk MCP server tools",
+  "version": "1.0.0",
+  "type": "mcp-integrated",
+  "capabilities": [
+    "project-setup",
+    "architecture-guidance",
+    "code-examples",
+    "troubleshooting",
+    "task-breakdown",
+    "comprehensive-assistance"
+  ],
+  "configuration": {
+    "mcpServer": "arkaft-google-adk",
+    "requiredTools": [
+      "adk_query",
+      "get_best_practices",
+      "validate_architecture",
+      "review_rust_file"
+    ],
+    "supportedAssistanceTypes": [
+      "project_setup",
+      "architecture_guidance", 
+      "code_examples",
+      "troubleshooting",
+      "task_breakdown",
+      "general_guidance"
+    ],
+    "processingTimeout": "60s",
+    "comprehensiveMode": true
+  },
+  "prompts": {
+    "system": "You are an expert Google ADK project assistant. Use all available arkaft-mcp-google-adk MCP server tools to provide comprehensive project assistance including setup guidance, architectural decisions, code examples, troubleshooting, and task breakdown. Always provide actionable, step-by-step guidance tailored to the user's specific needs.",
+    "projectSetup": "Provide comprehensive project setup guidance using get_best_practices and adk_query MCP tools. Include prerequisites, step-by-step instructions, configuration files, and validation steps. Focus on ADK best practices and proper project structure.",
+    "architectureGuidance": "Provide architectural decision support using validate_architecture and get_best_practices MCP tools. Include recommended approaches, alternatives, trade-offs, and implementation guidance. Focus on ADK architectural patterns and component design.",
+    "codeExamples": "Generate ADK-compliant code examples using adk_query and review_rust_file MCP tools. Include complete, working examples with explanations, best practices, and related patterns. Focus on practical, implementable code.",
+    "troubleshooting": "Provide troubleshooting assistance using all MCP tools as needed. Include likely causes, diagnostic steps, solutions, and prevention tips. Focus on ADK-specific issues and resolution strategies.",
+    "taskBreakdown": "Break down complex tasks into manageable steps using comprehensive MCP tool analysis. Include prerequisites, detailed steps, validation points, and success criteria. Focus on practical implementation guidance.",
+    "errorFallback": "The MCP server is currently unavailable. Providing comprehensive fallback guidance based on general ADK knowledge and best practices. For complete assistance, please retry when the MCP server is accessible."
+  },
+  "errorHandling": {
+    "mcpUnavailable": {
+      "strategy": "comprehensive-fallback",
+      "fallbackMessage": "MCP server unavailable - providing comprehensive fallback guidance",
+      "retryAttempts": 3,
+      "retryDelay": "10s"
+    },
+    "toolFailure": {
+      "strategy": "partial-analysis",
+      "continueOnFailure": true,
+      "reportFailures": true,
+      "fallbackToOtherTools": true
+    },
+    "timeout": {
+      "strategy": "abort-with-partial-results",
+      "message": "Assistance request timed out - providing partial results"
+    }
+  },
+  "performance": {
+    "debounceMs": 1000,
+    "maxConcurrentRequests": 2,
+    "cacheResults": true,
+    "cacheTtl": "15m",
+    "enableParallelToolCalls": true
+  },
+  "integration": {
+    "hooks": [],
+    "triggers": [
+      {
+        "type": "manual",
+        "keywords": [
+          "adk-assistant",
+          "adk-help",
+          "adk-project-help"
+        ]
+      },
+      {
+        "type": "contextual",
+        "patterns": ["*.rs", "Cargo.toml", "adk.toml"],
+        "conditions": {
+          "projectType": "adk",
+          "userRequest": true
+        }
+      }
+    ],
+    "contextRequirements": [
+      "user-request",
+      "project-context",
+      "assistance-type"
+    ]
+  },
+  "output": {
+    "format": "markdown",
+    "sections": [
+      "summary",
+      "primary-guidance",
+      "best-practices",
+      "additional-resources",
+      "follow-up-suggestions",
+      "references"
+    ],
+    "assistanceTypes": {
+      "project_setup": {
+        "sections": ["prerequisites", "setup-steps", "configuration-files", "validation-steps", "next-steps"]
+      },
+      "architecture_guidance": {
+        "sections": ["decision-context", "recommended-approach", "alternatives", "trade-offs", "implementation-guidance", "validation-criteria"]
+      },
+      "code_examples": {
+        "sections": ["examples", "explanations", "best-practices", "related-patterns"]
+      },
+      "troubleshooting": {
+        "sections": ["issue-description", "likely-causes", "diagnostic-steps", "solutions", "prevention-tips"]
+      },
+      "task_breakdown": {
+        "sections": ["task-description", "complexity-level", "prerequisites", "steps", "validation-points", "success-criteria"]
+      }
+    },
+    "includeExamples": true,
+    "includeReferences": true,
+    "includeFollowUp": true
+  },
+  "coordination": {
+    "shareContext": true,
+    "avoidDuplication": true,
+    "complementOtherAgents": true,
+    "prioritySystem": {
+      "manual": 1,
+      "project-assistant": 2,
+      "specialized-agents": 3
+    }
+  },
+  "assistance": {
+    "comprehensiveMode": true,
+    "useAllTools": true,
+    "adaptToContext": true,
+    "provideAlternatives": true,
+    "includeValidation": true,
+    "stepByStepGuidance": true
+  },
+  "dependencies": {
+    "mcpServers": ["arkaft-google-adk"],
+    "pythonPackages": [
+      "asyncio",
+      "dataclasses", 
+      "typing",
+      "json",
+      "pathlib",
+      "enum"
+    ],
+    "minimumKiroVersion": "1.0.0"
+  },
+  "metadata": {
+    "author": "Arkaft ADK Development Suite",
+    "license": "MIT",
+    "repository": "https://github.com/arkaft/adk-development-suite",
+    "documentation": "https://docs.arkaft.com/adk-agents/project-assistant",
+    "tags": [
+      "adk",
+      "project-assistant",
+      "comprehensive",
+      "setup",
+      "architecture",
+      "examples",
+      "troubleshooting",
+      "task-breakdown",
+      "mcp",
+      "rust"
+    ]
+  }
+}
