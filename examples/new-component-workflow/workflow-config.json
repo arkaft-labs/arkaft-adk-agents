@@ -1,0 +1,201 @@
+{
+  "name": "new-component-workflow",
+  "description": "Complete workflow for creating new ADK components with validation and guidance",
+  "version": "1.0",
+  "trigger": {
+    "type": "manual",
+    "keywords": ["new-component", "create-component", "add-component"],
+    "description": "Trigger when user wants to create a new ADK component"
+  },
+  "steps": [
+    {
+      "id": "validate-component-name",
+      "name": "Validate Component Name",
+      "description": "Validate the proposed component name and check for conflicts",
+      "agent": "adk-project-assistant",
+      "prompt": "The user wants to create a new ADK component. Please validate the component name '{component_name}' and check for naming conflicts, ensure it follows ADK naming conventions, and suggest improvements if needed.",
+      "inputs": [
+        {
+          "name": "component_name",
+          "type": "string",
+          "required": true,
+          "description": "Name of the component to create"
+        },
+        {
+          "name": "component_type",
+          "type": "string",
+          "required": false,
+          "options": ["service", "model", "handler", "middleware", "utility"],
+          "description": "Type of component to create"
+        }
+      ],
+      "outputs": [
+        "name_validation_result",
+        "suggested_improvements",
+        "naming_conventions"
+      ],
+      "conditions": {
+        "continue_on_success": true,
+        "require_user_approval": false
+      }
+    },
+    {
+      "id": "check-architecture-compliance",
+      "name": "Check Architecture Compliance",
+      "description": "Ensure the component fits the overall project architecture",
+      "agent": "adk-architecture",
+      "prompt": "A new ADK component '{component_name}' of type '{component_type}' is being created. Please validate that this component fits the current project architecture, check for proper placement in the project structure, and ensure it follows ADK architectural patterns.",
+      "inputs": [
+        "component_name",
+        "component_type",
+        "project_structure"
+      ],
+      "outputs": [
+        "architecture_validation",
+        "placement_recommendations",
+        "dependency_suggestions"
+      ],
+      "conditions": {
+        "continue_on_success": true,
+        "require_user_approval": true,
+        "approval_message": "Architecture validation complete. Continue with component creation?"
+      }
+    },
+    {
+      "id": "generate-component-template",
+      "name": "Generate Component Template",
+      "description": "Generate the initial component code template",
+      "agent": "adk-project-assistant",
+      "prompt": "Generate a complete code template for the ADK component '{component_name}' of type '{component_type}'. Include proper error handling, documentation, tests, and follow ADK best practices. Base the implementation on the architecture validation results.",
+      "inputs": [
+        "component_name",
+        "component_type",
+        "architecture_validation",
+        "project_context"
+      ],
+      "outputs": [
+        "component_code",
+        "test_code",
+        "documentation",
+        "integration_instructions"
+      ],
+      "conditions": {
+        "continue_on_success": true,
+        "require_user_approval": true,
+        "approval_message": "Component template generated. Review and approve the code?"
+      }
+    },
+    {
+      "id": "create-component-files",
+      "name": "Create Component Files",
+      "description": "Create the actual component files in the project",
+      "agent": "adk-project-assistant",
+      "prompt": "Create the component files for '{component_name}' in the appropriate project directories. Create the main component file, test file, and update any necessary configuration files (Cargo.toml, mod.rs, etc.).",
+      "inputs": [
+        "component_code",
+        "test_code",
+        "component_name",
+        "component_type",
+        "placement_recommendations"
+      ],
+      "outputs": [
+        "created_files",
+        "updated_files",
+        "file_locations"
+      ],
+      "conditions": {
+        "continue_on_success": true,
+        "require_user_approval": false
+      }
+    },
+    {
+      "id": "review-implementation",
+      "name": "Review Implementation",
+      "description": "Review the created component for ADK compliance and best practices",
+      "agent": "adk-code-review",
+      "prompt": "Review the newly created ADK component '{component_name}' for compliance with ADK best practices, code quality, error handling, and potential improvements. Focus on the implementation quality and integration with the existing codebase.",
+      "inputs": [
+        "component_code",
+        "component_name",
+        "file_locations"
+      ],
+      "outputs": [
+        "code_review_results",
+        "improvement_suggestions",
+        "compliance_status"
+      ],
+      "conditions": {
+        "continue_on_success": true,
+        "require_user_approval": false
+      }
+    },
+    {
+      "id": "generate-integration-guide",
+      "name": "Generate Integration Guide",
+      "description": "Generate documentation for integrating the new component",
+      "agent": "adk-documentation",
+      "prompt": "Generate comprehensive integration documentation for the new ADK component '{component_name}'. Include usage examples, API documentation, integration steps, and any special considerations for using this component in ADK projects.",
+      "inputs": [
+        "component_name",
+        "component_type",
+        "component_code",
+        "integration_instructions"
+      ],
+      "outputs": [
+        "integration_documentation",
+        "usage_examples",
+        "api_documentation"
+      ],
+      "conditions": {
+        "continue_on_success": true,
+        "require_user_approval": false
+      }
+    },
+    {
+      "id": "workflow-summary",
+      "name": "Workflow Summary",
+      "description": "Provide a summary of the component creation workflow",
+      "agent": "adk-project-assistant",
+      "prompt": "Provide a comprehensive summary of the component creation workflow for '{component_name}'. Include what was created, where files are located, next steps for the developer, and any important notes about the new component.",
+      "inputs": [
+        "component_name",
+        "created_files",
+        "code_review_results",
+        "integration_documentation"
+      ],
+      "outputs": [
+        "workflow_summary",
+        "next_steps",
+        "important_notes"
+      ],
+      "conditions": {
+        "continue_on_success": true,
+        "require_user_approval": false
+      }
+    }
+  ],
+  "error_handling": {
+    "on_step_failure": {
+      "action": "pause_workflow",
+      "provide_guidance": true,
+      "allow_retry": true,
+      "max_retries": 3
+    },
+    "on_user_cancellation": {
+      "action": "cleanup_partial_work",
+      "provide_summary": true
+    }
+  },
+  "coordination": {
+    "share_context_between_steps": true,
+    "maintain_workflow_state": true,
+    "allow_step_skipping": false,
+    "enable_rollback": true
+  },
+  "customization": {
+    "allow_custom_templates": true,
+    "template_directory": ".kiro/templates/components/",
+    "support_project_specific_rules": true,
+    "enable_workflow_extensions": true
+  }
+}

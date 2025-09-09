@@ -1,0 +1,79 @@
+{
+  "version": "1.0",
+  "description": "Basic ADK Agents configuration for getting started",
+  "agents": {
+    "adk-code-review": {
+      "enabled": true,
+      "mcpServer": "arkaft-google-adk",
+      "triggers": {
+        "autoReview": true,
+        "fileSizeLimit": "50KB",
+        "excludePatterns": ["target/**", "*.test.rs"]
+      },
+      "preferences": {
+        "verbosity": "medium",
+        "includeExamples": true
+      }
+    },
+    "adk-architecture": {
+      "enabled": true,
+      "mcpServer": "arkaft-google-adk",
+      "validation": {
+        "strictMode": false
+      }
+    },
+    "adk-documentation": {
+      "enabled": true,
+      "mcpServer": "arkaft-google-adk",
+      "preferences": {
+        "includeExamples": true,
+        "linkToOfficial": true
+      }
+    },
+    "adk-project-assistant": {
+      "enabled": true,
+      "mcpServer": "arkaft-google-adk",
+      "preferences": {
+        "verbosity": "medium",
+        "autoSuggest": true
+      }
+    }
+  },
+  "hooks": {
+    "adk-code-review": {
+      "enabled": true,
+      "sensitivity": "medium",
+      "debounceMs": 2000
+    },
+    "adk-architecture-validator": {
+      "enabled": true,
+      "triggerOnSave": true
+    },
+    "adk-docs-assistant": {
+      "enabled": true,
+      "contextAware": true
+    }
+  },
+  "performance": {
+    "debouncing": {
+      "codeReview": 2000,
+      "architecture": 1000,
+      "documentation": 500
+    },
+    "resourceLimits": {
+      "maxFileSize": "50KB",
+      "timeoutMs": 30000,
+      "maxRetries": 3
+    }
+  },
+  "errorHandling": {
+    "circuitBreaker": {
+      "failureThreshold": 5,
+      "recoveryTimeout": 60000
+    },
+    "fallbackBehavior": {
+      "enableFallbacks": true,
+      "providePlaceholderGuidance": true
+    }
+  }
+}

@@ -1,0 +1,301 @@
+{
+  "version": "1.0",
+  "description": "Advanced ADK Agents configuration with all features enabled",
+  "agents": {
+    "adk-code-review": {
+      "enabled": true,
+      "mcpServer": "arkaft-google-adk",
+      "triggers": {
+        "autoReview": true,
+        "fileSizeLimit": "100KB",
+        "excludePatterns": ["target/**", "*.test.rs", "examples/**", "benches/**"],
+        "includePatterns": ["src/**/*.rs", "tests/**/*.rs"],
+        "debounceMs": 1500
+      },
+      "analysis": {
+        "checkTranslation": true,
+        "validateArchitecture": true,
+        "enforceStyle": true,
+        "suggestOptimizations": true,
+        "checkSecurity": true,
+        "analyzePerformance": true
+      },
+      "output": {
+        "verbosity": "detailed",
+        "includeExamples": true,
+        "linkToDocumentation": true,
+        "groupSuggestions": true,
+        "prioritizeIssues": true,
+        "includeMetrics": true
+      },
+      "customRules": [
+        {
+          "name": "custom-error-handling",
+          "description": "Enforce custom error handling patterns",
+          "pattern": "Result<.*>",
+          "suggestion": "Consider using ADK-specific error types"
+        }
+      ]
+    },
+    "adk-architecture": {
+      "enabled": true,
+      "mcpServer": "arkaft-google-adk",
+      "validation": {
+        "strictMode": true,
+        "customPatterns": [
+          {
+            "name": "service-layer-pattern",
+            "description": "Enforce service layer organization",
+            "rules": [
+              "services must be in src/services/",
+              "each service must have corresponding tests",
+              "services must implement standard traits"
+            ]
+          },
+          {
+            "name": "data-layer-pattern",
+            "description": "Enforce data layer patterns",
+            "rules": [
+              "models must be in src/models/",
+              "repositories must be in src/repositories/",
+              "database migrations must be versioned"
+            ]
+          }
+        ],
+        "ignorePatterns": ["legacy/**", "deprecated/**", "experimental/**"],
+        "enforceNaming": true,
+        "checkDependencies": true
+      },
+      "reporting": {
+        "includeCompliance": true,
+        "suggestRefactoring": true,
+        "prioritizeIssues": true,
+        "generateMetrics": true,
+        "trackProgress": true
+      }
+    },
+    "adk-documentation": {
+      "enabled": true,
+      "mcpServer": "arkaft-google-adk",
+      "preferences": {
+        "includeExamples": true,
+        "linkToOfficial": true,
+        "contextDepth": "comprehensive",
+        "cacheResponses": true,
+        "personalizeResponses": true
+      },
+      "sources": {
+        "officialDocs": true,
+        "communityExamples": true,
+        "internalKnowledge": true,
+        "bestPractices": true,
+        "troubleshooting": true
+      },
+      "queryOptimization": {
+        "useContext": true,
+        "expandQueries": true,
+        "suggestRelated": true
+      }
+    },
+    "adk-project-assistant": {
+      "enabled": true,
+      "mcpServer": "arkaft-google-adk",
+      "assistance": {
+        "projectSetup": true,
+        "architecturalGuidance": true,
+        "troubleshooting": true,
+        "taskBreakdown": true,
+        "codeGeneration": true,
+        "testingGuidance": true
+      },
+      "preferences": {
+        "verbosity": "comprehensive",
+        "autoSuggest": true,
+        "adkVersion": "latest",
+        "includeAlternatives": true,
+        "provideExamples": true,
+        "stepByStepGuidance": true
+      },
+      "specializations": {
+        "microservices": true,
+        "webApis": true,
+        "dataProcessing": true,
+        "authentication": true
+      }
+    }
+  },
+  "hooks": {
+    "adk-code-review": {
+      "enabled": true,
+      "sensitivity": "high",
+      "debounceMs": 1500,
+      "conditions": {
+        "minFileSize": "50B",
+        "maxFileSize": "100KB",
+        "projectTypes": ["adk", "adk-microservice", "adk-web"],
+        "excludePaths": ["target/**", "*.test.rs", "examples/**"],
+        "requireMarkers": false
+      },
+      "advanced": {
+        "batchProcessing": true,
+        "intelligentTriggers": true,
+        "contextAwareness": true
+      }
+    },
+    "adk-architecture-validator": {
+      "enabled": true,
+      "triggerOnSave": true,
+      "watchFiles": [
+        "src/lib.rs",
+        "src/main.rs",
+        "src/**/mod.rs",
+        "Cargo.toml",
+        "src/services/**/*.rs",
+        "src/models/**/*.rs"
+      ],
+      "debounceMs": 1000,
+      "batchValidation": true
+    },
+    "adk-docs-assistant": {
+      "enabled": true,
+      "contextAware": true,
+      "triggers": ["adk-help", "adk-docs", "adk-question", "adk-guide"],
+      "priority": "high",
+      "smartActivation": true
+    }
+  },
+  "performance": {
+    "debouncing": {
+      "codeReview": 1500,
+      "architecture": 1000,
+      "documentation": 300
+    },
+    "rateLimiting": {
+      "maxConcurrentAgents": 3,
+      "cooldownPeriod": 3000,
+      "maxRequestsPerMinute": 50
+    },
+    "resourceLimits": {
+      "maxFileSize": "100KB",
+      "timeoutMs": 45000,
+      "maxRetries": 5,
+      "maxMemoryMB": 512
+    },
+    "optimization": {
+      "enableCaching": true,
+      "parallelProcessing": true,
+      "smartBatching": true,
+      "resourcePooling": true
+    }
+  },
+  "caching": {
+    "enabled": true,
+    "strategies": {
+      "mcpResponses": {
+        "ttl": 3600,
+        "maxSize": 200,
+        "keyStrategy": "content-hash",
+        "compression": true
+      },
+      "projectAnalysis": {
+        "ttl": 1800,
+        "invalidateOnChange": true,
+        "smartInvalidation": true
+      },
+      "documentationQueries": {
+        "ttl": 7200,
+        "maxSize": 100,
+        "personalizedCache": true
+      }
+    }
+  },
+  "errorHandling": {
+    "circuitBreaker": {
+      "failureThreshold": 3,
+      "recoveryTimeout": 30000,
+      "halfOpenMaxCalls": 5,
+      "adaptiveThreshold": true
+    },
+    "retryPolicy": {
+      "maxAttempts": 5,
+      "backoffMultiplier": 1.5,
+      "initialDelay": 500,
+      "maxDelay": 15000,
+      "jitter": true
+    },
+    "fallbackBehavior": {
+      "enableFallbacks": true,
+      "cacheResponses": true,
+      "providePlaceholderGuidance": true,
+      "contextAwareFallbacks": true,
+      "learningFallbacks": true
+    },
+    "monitoring": {
+      "trackErrors": true,
+      "generateReports": true,
+      "alertThresholds": {
+        "errorRate": 0.1,
+        "responseTime": 10000
+      }
+    }
+  },
+  "coordination": {
+    "conflictResolution": {
+      "strategy": "priority-based",
+      "allowConcurrent": true,
+      "maxConcurrentAgents": 3,
+      "intelligentScheduling": true
+    },
+    "contextSharing": {
+      "enabled": true,
+      "shareAnalysisResults": true,
+      "contextTtl": 3600,
+      "smartContextMerging": true
+    },
+    "messaging": {
+      "consistencyChecks": true,
+      "avoidContradictions": true,
+      "consolidateRecommendations": true,
+      "generateSummaries": true
+    }
+  },
+  "extensibility": {
+    "customAgents": {
+      "allowCustomAgents": true,
+      "customAgentPath": ".kiro/custom-agents/",
+      "inheritFromBase": true,
+      "validateCustomAgents": true
+    },
+    "customHooks": {
+      "allowCustomHooks": true,
+      "customHookPath": ".kiro/custom-hooks/",
+      "validateSchema": true,
+      "supportComplexConditions": true
+    },
+    "workflows": {
+      "enableCustomWorkflows": true,
+      "workflowPath": ".kiro/workflows/",
+      "supportMultiStep": true,
+      "allowConditionalSteps": true
+    }
+  },
+  "monitoring": {
+    "enabled": true,
+    "metrics": {
+      "collectPerformance": true,
+      "collectUsage": true,
+      "collectErrors": true,
+      "collectUserSatisfaction": true
+    },
+    "reporting": {
+      "generateDailyReports": true,
+      "generateWeeklyReports": true,
+      "includeRecommendations": true
+    },
+    "alerting": {
+      "enableAlerts": true,
+      "alertChannels": ["log", "notification"],
+      "customThresholds": true
+    }
+  }
+}
